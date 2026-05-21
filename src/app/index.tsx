@@ -1,98 +1,89 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
-
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
-
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+import React from 'react';
+import {
+  View, Text, TouchableOpacity,
+  StyleSheet, ScrollView, StatusBar,
+} from 'react-native';
+import { useRouter } from 'expo-router';
+import { Header } from '../components/Header';
+import { colors } from '../constants/colors';
 
 export default function HomeScreen() {
+  const router = useRouter();
+
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <View style={styles.container}>
+      <StatusBar barStyle="dark-content" />
+      <Header />
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <ScrollView contentContainerStyle={styles.content}>
+        {/* Badge */}
+        <View style={styles.badge}>
+          <Text style={styles.badgeText}>Monitoramento de saúde em tempo real</Text>
+        </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+        {/* Headline */}
+        <Text style={styles.title}>
+          Cuidado conectado,{' '}
+          <Text style={styles.titleHighlight}>onde você estiver</Text>
+        </Text>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+        {/* Subtext */}
+        <Text style={styles.subtitle}>
+          HealthLink leva monitoramento médico contínuo a comunidades rurais e regiões
+          isoladas, unindo uma pulseira inteligente com a tecnologia LoRa e Wi-Fi para
+          conectar pacientes e profissionais da saúde, independentemente da distância.
+        </Text>
+
+        {/* Buttons */}
+        <TouchableOpacity
+          style={styles.primaryButton}
+          onPress={() => router.push('/how-it-works')}
+        >
+          <Text style={styles.primaryButtonText}>Conhecer a solução →</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={styles.secondaryButton}
+          onPress={() => router.push('/features')}
+        >
+          <Text style={styles.secondaryButtonText}>Ver demonstração</Text>
+        </TouchableOpacity>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
+  container: { flex: 1, backgroundColor: colors.background },
+  content: {
+    padding: 24,
+    paddingTop: 32,
   },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
+  badge: {
+    alignSelf: 'flex-start',
+    backgroundColor: colors.primaryLight,
+    borderRadius: 20,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    marginBottom: 20,
+  },
+  badgeText: { color: colors.primary, fontSize: 12, fontWeight: '600' },
+  title: { fontSize: 32, fontWeight: '800', color: colors.text, lineHeight: 40, marginBottom: 16 },
+  titleHighlight: { color: colors.primary },
+  subtitle: { fontSize: 15, color: colors.textMuted, lineHeight: 24, marginBottom: 32 },
+  primaryButton: {
+    backgroundColor: colors.primary,
+    borderRadius: 10,
+    paddingVertical: 14,
     alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    marginBottom: 12,
   },
-  heroSection: {
+  primaryButtonText: { color: colors.white, fontWeight: '700', fontSize: 15 },
+  secondaryButton: {
+    borderRadius: 10,
+    paddingVertical: 14,
     alignItems: 'center',
-    justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    backgroundColor: colors.cardBg,
   },
-  title: {
-    textAlign: 'center',
-  },
-  code: {
-    textTransform: 'uppercase',
-  },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
-  },
+  secondaryButtonText: { color: colors.primary, fontWeight: '600', fontSize: 15 },
 });
