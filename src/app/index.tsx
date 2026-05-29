@@ -16,25 +16,19 @@ export default function HomeScreen() {
       <Header />
 
       <ScrollView contentContainerStyle={styles.content}>
-        {/* Badge */}
         <View style={styles.badge}>
           <Text style={styles.badgeText}>Monitoramento de saúde em tempo real</Text>
         </View>
-
-        {/* Headline */}
         <Text style={styles.title}>
           Cuidado conectado,{' '}
           <Text style={styles.titleHighlight}>onde você estiver</Text>
         </Text>
 
-        {/* Subtext */}
         <Text style={styles.subtitle}>
           HealthLink leva monitoramento médico contínuo a comunidades rurais e regiões
           isoladas, unindo uma pulseira inteligente com a tecnologia LoRa e Wi-Fi para
           conectar pacientes e profissionais da saúde, independentemente da distância.
         </Text>
-
-        {/* Buttons */}
         <TouchableOpacity
           style={styles.primaryButton}
           onPress={() => router.push('/how-it-works')}
